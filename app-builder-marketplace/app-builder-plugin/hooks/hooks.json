@@ -1,0 +1,55 @@
+{
+  "hooks": {
+
+    "PreToolUse": [
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/snapshot-before-phase.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+
+    "PostToolUse": [
+      {
+        "matcher": "Read|Write|Edit|Bash|Glob|Grep|WebFetch|WebSearch|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/progress-reporter.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "Check if we are in an active App Builder session (look for .app-builder/state.json in $CLAUDE_PROJECT_DIR). If it exists and a phase is marked 'in_progress', verify the phase artifact file was actually written. If the artifact is missing, return: { \"decision\": \"block\", \"reason\": \"Phase artifact not saved. The subagent must write the phase output to .app-builder/ before the session can close.\" }. If the artifact exists or there is no active session, return: { \"decision\": \"ok\" }. $ARGUMENTS",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/on-subagent-stop.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+
+  }
+}

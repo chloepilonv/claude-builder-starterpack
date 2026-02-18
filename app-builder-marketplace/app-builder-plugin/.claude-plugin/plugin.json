@@ -1,0 +1,8 @@
+{
+  "name": "app-builder",
+  "description": "A structured 9-phase product development pipeline. From spec to deployment — works for any product type (e-commerce, AI tools, scientific software, etc).",
+  "version": "1.0.0",
+  "author": {
+    "name": "Your Name"
+  }
+}
