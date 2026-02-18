@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Builder Starterpack</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --red: #d42b2b;
+  --ink: #1a1714;
+  --ink-light: #6b635a;
+  --ink-faint: #a09888;
+  --cream: #f7f3ed;
+  --card: #fffefa;
+  --border: rgba(26, 23, 20, 0.08);
+  --serif: 'EB Garamond', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--sans);
+  background: linear-gradient(180deg, #e8dfd4 0%, #d6cfc5 40%, #c9c0b4 100%);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Soft warm light from top */
+body::before {
+  content: '';
+  position: fixed;
+  top: -30%; left: 30%;
+  width: 70vw; height: 70vw;
+  background: radial-gradient(ellipse, rgba(255,248,235,0.5) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Paper grain */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ---- The card ---- */
+.card {
+  width: 90vw;
+  max-width: 920px;
+  height: 85vh;
+  max-height: 620px;
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.04),
+    0 4px 16px rgba(0,0,0,0.06),
+    0 24px 60px rgba(0,0,0,0.08);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ---- Top bar ---- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.topbar-left .label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ink-faint);
+}
+
+.topbar-left .tag {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--red);
+  letter-spacing: 0.08em;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.topbar-right .dot {
+  width: 8px; height: 8px;
+  border: 1.5px solid var(--red);
+  border-radius: 50%;
+}
+
+.topbar-right .install-btn {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  padding: 5px 14px;
+  background: none;
+  border: 1.5px solid var(--ink);
+  border-radius: 100px;
+  cursor: pointer;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  transition: all 0.2s;
+}
+
+.topbar-right .install-btn:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: white;
+}
+
+/* ---- Main content ---- */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 3rem 2rem;
+  min-height: 0;
+}
+
+/* Title */
+.title {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink-light);
+  font-style: italic;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+
+/* ---- Phase grid (the core visual) ---- */
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 6px;
+  min-height: 0;
+}
+
+.cell {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 0.4rem;
+  text-align: center;
+  transition: all 0.25s;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+.cell:hover {
+  background: white;
+  border-color: var(--red);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(212, 43, 43, 0.08);
+}
+
+.cell .num {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  color: var(--ink-faint);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.05em;
+}
+
+.cell .name {
+  font-family: var(--serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 0.3rem;
+}
+
+.cell .cmd {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  color: var(--red);
+  letter-spacing: 0.02em;
+}
+
+.cell:hover .num { color: var(--red); }
+
+/* ---- Bottom bar ---- */
+.bottombar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.bottombar-left {
+  display: flex;
+  gap: 2rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat .s-label {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ink-faint);
+  margin-bottom: 0.1rem;
+}
+
+.stat .s-val {
+  font-family: var(--serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.bottombar-right {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.08em;
+}
+
+.bottombar-right span { color: var(--red); }
+
+/* ---- Floating corner labels (like the reference image) ---- */
+.corner {
+  position: fixed;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ink-faint);
+  z-index: 2;
+}
+
+.corner.tl { top: 20px; left: 24px; }
+.corner.tr { top: 20px; right: 24px; color: var(--red); }
+.corner.bl { bottom: 20px; left: 24px; }
+.corner.br { bottom: 20px; right: 24px; }
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .card {
+    width: 95vw;
+    height: 90vh;
+    max-height: none;
+    border-radius: 12px;
+  }
+  .main { padding: 1.5rem 1.5rem 1rem; }
+  .title { font-size: clamp(1.6rem, 6vw, 2.5rem); }
+  .subtitle { margin-bottom: 1.5rem; font-size: 0.88rem; }
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+  }
+  .topbar, .bottombar { padding: 10px 16px; }
+  .bottombar-left { gap: 1.25rem; }
+  .corner { display: none; }
+}
+
+@media (max-width: 480px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+  .main { padding: 1.25rem 1rem 0.75rem; }
+  .topbar-left .label { display: none; }
+}
+
+@media (max-height: 600px) {
+  .card { height: 92vh; }
+  .main { padding: 1.25rem 2rem 0.75rem; }
+  .subtitle { margin-bottom: 1rem; }
+  .cell { padding: 0.5rem 0.3rem; }
+  .cell .name { font-size: 0.65rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Corner labels -->
+<div class="corner tl">Claude Code Plugin</div>
+<div class="corner tr">v1.0.0</div>
+<div class="corner bl">2025</div>
+<div class="corner br">9 phases</div>
+
+<!-- The card -->
+<div class="card">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="tag">Claude Builder StarterPack</span>
+      <span class="label">N.001</span>
+    </div>
+    <div class="topbar-right">
+      <div class="dot"></div>
+      <a class="install-btn" href="https://github.com/chloepilonv/claude-builder-starterpack" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="title">App<br>Builder</div>
+    <div class="subtitle">All you need to code with Claude. From spec to deploy.</div>
+
+    <!-- Phase grid -->
+    <div class="grid">
+      <div class="cell">
+        <div class="num">01</div>
+        <div class="name">Spec</div>
+        <div class="cmd">/spec</div>
+      </div>
+      <div class="cell">
+        <div class="num">02</div>
+        <div class="name">Plan</div>
+        <div class="cmd">/plan</div>
+      </div>
+      <div class="cell">
+        <div class="num">03</div>
+        <div class="name">Build 1</div>
+        <div class="cmd">/build 1</div>
+      </div>
+      <div class="cell">
+        <div class="num">04</div>
+        <div class="name">Build 2</div>
+        <div class="cmd">/build 2</div>
+      </div>
+      <div class="cell">
+        <div class="num">05</div>
+        <div class="name">Build 3</div>
+        <div class="cmd">/build 3</div>
+      </div>
+      <div class="cell">
+        <div class="num">06</div>
+        <div class="name">Frontend</div>
+        <div class="cmd">/frontend</div>
+      </div>
+      <div class="cell">
+        <div class="num">07</div>
+        <div class="name">Design</div>
+        <div class="cmd">/design</div>
+      </div>
+      <div class="cell">
+        <div class="num">08</div>
+        <div class="name">Docs</div>
+        <div class="cmd">/docs</div>
+      </div>
+      <div class="cell">
+        <div class="num">09</div>
+        <div class="name">Deploy</div>
+        <div class="cmd">/deploy</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="bottombar">
+    <div class="bottombar-left">
+      <div class="stat">
+        <span class="s-label">Agents</span>
+        <span class="s-val">10</span>
+      </div>
+      <div class="stat">
+        <span class="s-label">Hooks</span>
+        <span class="s-val">6</span>
+      </div>
+      <div class="stat">
+        <span class="s-label">Commands</span>
+        <span class="s-val">11</span>
+      </div>
+      <div class="stat">
+        <span class="s-label">Product types</span>
+        <span class="s-val">Any</span>
+      </div>
+    </div>
+    <div class="bottombar-right">Built for <span>Claude Code</span></div>
+  </div>
+
+</div>
+
+<script>
+function copy(el) {
+  navigator.clipboard.writeText('/plugin marketplace add chloepilonv/claude-builder-starterpack').then(function() {
+    var b = el.querySelector('.copy-txt') || el;
+    var o = b.textContent;
+    b.textContent = 'Copied!';
+    setTimeout(function() { b.textContent = o; }, 1500);
+  });
+}
+</script>
+</body>
+</html>
