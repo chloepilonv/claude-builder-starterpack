@@ -52,48 +52,55 @@ Restart Claude Code when prompted.
 
 ## Usage
 
-### Start or resume a project
+### Start a new project (or resume one)
 
 ```
-/app-builder
+/cbs:app-builder
 ```
 
-Checks for `.claude-builder-starterpack/state.json` in your project, then either starts fresh or resumes from where you left off.
+Checks for `.app-builder/state.json` in your project. If it doesn't exist, starts fresh at Phase 1. If it does, shows the pipeline status and asks where to resume.
 
-### Shortcuts — jump to any phase directly
+### The workflow
 
-```
-/spec                        # Phase 1 — Write product spec
-/plan                        # Phase 2 — Create execution plan
-/build 1                     # MVP Phase 1 (goal from plan)
-/build 2                     # MVP Phase 2 (goal from plan)
-/build 3                     # MVP Phase 3 (goal from plan)
-/frontend                    # Phase 6 — Basic functional UI
-/design pink barbie          # Phase 7 — Apply design system
-/docs                        # Phase 8 — Docs + repo cleanup
-/deploy Vercel               # Phase 9 — Deploy + debug
-/new-feature Stripe billing  # Post-launch feature addition
-/cleanup                     # Full hygiene sweep (anytime)
-/cleanup security            # Security audit only
-/nebius provision A100       # Nebius GPU infrastructure
-```
-
-### Check pipeline status
+Once started, the pipeline runs one phase at a time. Each phase delegates to a specialized subagent, then stops and waits for your approval before moving on:
 
 ```
-/claude-builder-starterpack status
+╔═══════════════════════════════════════════════════════╗
+║              APP BUILDER — PIPELINE STATUS            ║
+╠═════╦══════════════════════════════╦══════════════════╣
+║  1  ║  Spec Definition             ║  ✅ done         ║
+║  2  ║  Plan Creation & Validation  ║  ⬅ just finished ║
+║  3  ║  MVP Phase 1                 ║  ⏳ pending      ║
+...
+╚═════╩══════════════════════════════╩══════════════════╝
+
+Ready to move to Phase 3?  → yes / review / redo / skip / stop
 ```
 
-### See all post-launch features
+### Jump to any phase directly
 
 ```
-/claude-builder-starterpack features
+/cbs:spec                        # Phase 1 — Write product spec
+/cbs:plan                        # Phase 2 — Create execution plan
+/cbs:build 1                     # MVP Phase 1 (goal from plan)
+/cbs:build 2                     # MVP Phase 2 (goal from plan)
+/cbs:build 3                     # MVP Phase 3 (goal from plan)
+/cbs:frontend                    # Phase 6 — Basic functional UI
+/cbs:design pink barbie          # Phase 7 — Apply design system
+/cbs:docs                        # Phase 8 — Docs + repo cleanup
+/cbs:deploy Vercel               # Phase 9 — Deploy + debug
+/cbs:new-feature Stripe billing  # Post-launch feature addition
+/cbs:cleanup                     # Full hygiene sweep (anytime)
+/cbs:cleanup security            # Security audit only
+/cbs:nebius provision A100       # Nebius GPU infrastructure
 ```
 
-### Restart a phase
+### Pipeline utilities
 
 ```
-/claude-builder-starterpack restart phase 4
+/cbs:app-builder status          # Show current pipeline status
+/cbs:app-builder features        # List all post-launch features
+/cbs:app-builder restart phase 4 # Reset phase 4 and everything after
 ```
 
 ---
@@ -120,13 +127,13 @@ Checks for `.claude-builder-starterpack/state.json` in your project, then either
 The design agent takes a style direction. Be specific:
 
 ```
-/design pink barbie
-/design dark brutalist terminal
-/design clean swiss fintech
-/design luxury editorial magazine
-/design sci-fi data dashboard
-/design moodboard: early iPod UI, white plastic, chrome, soft gradients
-/design moodboard: ./refs/brand1.png ./refs/brand2.png
+/cbs:design pink barbie
+/cbs:design dark brutalist terminal
+/cbs:design clean swiss fintech
+/cbs:design luxury editorial magazine
+/cbs:design sci-fi data dashboard
+/cbs:design moodboard: early iPod UI, white plastic, chrome, soft gradients
+/cbs:design moodboard: ./refs/brand1.png ./refs/brand2.png
 ```
 
 It translates your direction into concrete tokens: specific hex colors, real font names, spatial character, signature interaction details.
@@ -151,16 +158,16 @@ MVP phase goals are defined during planning, not assumed. Examples:
 Run at any time. Scoped or full:
 
 ```
-/cleanup                    # Full suite
-/cleanup security           # Secrets, vulns, OWASP patterns
-/cleanup files              # Dead files, .gitignore hygiene
-/cleanup readme             # README accuracy check and update
-/cleanup deps               # npm audit / pip-audit and patching
+/cbs:cleanup                    # Full suite
+/cbs:cleanup security           # Secrets, vulns, OWASP patterns
+/cbs:cleanup files              # Dead files, .gitignore hygiene
+/cbs:cleanup readme             # README accuracy check and update
+/cbs:cleanup deps               # npm audit / pip-audit and patching
 ```
 
 **Recommended checkpoints:**
 - After MVP Phase 3, before building frontend
-- Before deploy — `/cleanup security` is non-optional
+- Before deploy — `/cbs:cleanup security` is non-optional
 - After any heavy feature sprint
 
 ---
@@ -187,17 +194,17 @@ claude-builder-starterpack/          ← clone this repo
     │   ├── feature-agent.md
     │   └── nebius-agent.md
     ├── skills/
-    │   ├── app-builder-orchestrate/  # /app-builder
-    │   ├── spec-definition/          # /spec
-    │   ├── plan-creation/            # /plan
-    │   ├── mvp-build/                # /build [N]
-    │   ├── frontend-basic/           # /frontend
-    │   ├── frontend-design/          # /design [style]
-    │   ├── documentation/            # /docs
-    │   ├── cleanup/                  # /cleanup [scope]
-    │   ├── deploy-debug/             # /deploy [platform]
-    │   ├── new-feature/              # /new-feature [desc]
-    │   └── nebius/                   # /nebius [action]
+    │   ├── app-builder-orchestrate/  # /cbs:app-builder
+    │   ├── spec-definition/          # /cbs:spec
+    │   ├── plan-creation/            # /cbs:plan
+    │   ├── mvp-build/                # /cbs:build [N]
+    │   ├── frontend-basic/           # /cbs:frontend
+    │   ├── frontend-design/          # /cbs:design [style]
+    │   ├── documentation/            # /cbs:docs
+    │   ├── cleanup/                  # /cbs:cleanup [scope]
+    │   ├── deploy-debug/             # /cbs:deploy [platform]
+    │   ├── new-feature/              # /cbs:new-feature [desc]
+    │   └── nebius/                   # /cbs:nebius [action]
     ├── hooks/
     │   └── hooks.json
     └── scripts/
