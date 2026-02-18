@@ -46,7 +46,11 @@ git clone https://github.com/chloepilonv/claude-builder-starterpack ~/claude-bui
 /plugin install claude-builder-starterpack@claude-builder-starterpack
 ```
 
-Restart Claude Code when prompted.
+Restart Claude Code when prompted. Then, in any project directory:
+
+```
+/cbs:app-builder
+```
 
 ---
 
