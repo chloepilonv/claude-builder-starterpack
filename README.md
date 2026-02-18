@@ -166,42 +166,45 @@ Run at any time. Scoped or full:
 ## Plugin Structure
 
 ```
-claude-builder-starterpack/
+claude-builder-starterpack/          ← clone this repo
 ├── .claude-plugin/
-│   └── plugin.json
+│   └── marketplace.json             ← registers the marketplace
 ├── README.md
-├── agents/
-│   ├── spec-agent.md
-│   ├── plan-agent.md
-│   ├── build-agent.md
-│   ├── frontend-agent.md
-│   ├── design-agent.md
-│   ├── docs-agent.md
-│   ├── cleanup-agent.md
-│   ├── deploy-agent.md
-│   ├── feature-agent.md
-│   └── nebius-agent.md
-├── skills/
-│   ├── app-builder-orchestrate/  # /app-builder
-│   ├── spec-definition/          # /spec
-│   ├── plan-creation/            # /plan
-│   ├── mvp-build/                # /build [N]
-│   ├── frontend-basic/           # /frontend
-│   ├── frontend-design/          # /design [style]
-│   ├── documentation/            # /docs
-│   ├── cleanup/                  # /cleanup [scope]
-│   ├── deploy-debug/             # /deploy [platform]
-│   ├── new-feature/              # /new-feature [desc]
-│   └── nebius/                   # /nebius [action]
-├── hooks/
-│   └── hooks.json
-└── scripts/
-    ├── snapshot-before-phase.sh
-    ├── progress-reporter.sh
-    ├── on-subagent-stop.sh
-    ├── on-file-write.sh
-    ├── guard-no-secrets.sh
-    └── guard-deploy-requires-cleanup.sh
+└── plugin/                          ← the installable plugin
+    ├── .claude-plugin/
+    │   └── plugin.json
+    ├── agents/
+    │   ├── spec-agent.md
+    │   ├── plan-agent.md
+    │   ├── build-agent.md
+    │   ├── frontend-agent.md
+    │   ├── design-agent.md
+    │   ├── docs-agent.md
+    │   ├── cleanup-agent.md
+    │   ├── deploy-agent.md
+    │   ├── feature-agent.md
+    │   └── nebius-agent.md
+    ├── skills/
+    │   ├── app-builder-orchestrate/  # /app-builder
+    │   ├── spec-definition/          # /spec
+    │   ├── plan-creation/            # /plan
+    │   ├── mvp-build/                # /build [N]
+    │   ├── frontend-basic/           # /frontend
+    │   ├── frontend-design/          # /design [style]
+    │   ├── documentation/            # /docs
+    │   ├── cleanup/                  # /cleanup [scope]
+    │   ├── deploy-debug/             # /deploy [platform]
+    │   ├── new-feature/              # /new-feature [desc]
+    │   └── nebius/                   # /nebius [action]
+    ├── hooks/
+    │   └── hooks.json
+    └── scripts/
+        ├── snapshot-before-phase.sh
+        ├── progress-reporter.sh
+        ├── on-subagent-stop.sh
+        ├── on-file-write.sh
+        ├── guard-no-secrets.sh
+        └── guard-deploy-requires-cleanup.sh
 ```
 
 ---

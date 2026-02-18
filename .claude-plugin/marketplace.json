@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "claude-builder-starterpack",
-      "source": ".",
+      "source": "./plugin",
       "description": "9-phase product development pipeline. Spec → Plan → MVP × 3 → Frontend → Design → Docs → Deploy."
     }
   ]
