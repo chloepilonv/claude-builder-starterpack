@@ -26,19 +26,21 @@ Phase 9  ──  Deploy & Debug
 
 ## Installation
 
-### Step 1 — Clone the repo
+Requires [Claude Code](https://claude.ai/code) 1.0.33+.
 
-```
-git clone https://github.com/your-username/claude-builder-starterpack ~/claude-builder-starterpack
+**1. Clone the repo**
+
+```bash
+git clone https://github.com/chloepilonv/claude-builder-starterpack ~/claude-builder-starterpack
 ```
 
-### Step 2 — Add the marketplace
+**2. Register the marketplace** — run this inside Claude Code
 
 ```
 /plugin marketplace add ~/claude-builder-starterpack
 ```
 
-### Step 3 — Install the plugin
+**3. Install the plugin** — run this inside Claude Code
 
 ```
 /plugin install claude-builder-starterpack@claude-builder-starterpack
@@ -294,12 +296,20 @@ To implement hooks 4–6, add the corresponding scripts to `scripts/` and update
 
 ## Team Setup
 
-Add to your project's `.claude/settings.json`:
+To enable the plugin for all team members on a project, add to your project's `.claude/settings.json`:
 
 ```json
 {
+  "extraKnownMarketplaces": {
+    "claude-builder-starterpack": {
+      "source": "github",
+      "repo": "chloepilonv/claude-builder-starterpack"
+    }
+  },
   "enabledPlugins": {
-    "claude-builder-starterpack": true
+    "claude-builder-starterpack@claude-builder-starterpack": true
   }
 }
 ```
+
+Anyone who opens the project will have the plugin automatically available.
