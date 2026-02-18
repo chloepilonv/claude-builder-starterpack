@@ -1,12 +1,12 @@
-# App Builder Plugin
+# Claude Builder Starterpack
 
-A structured, repeatable 9-phase product development pipeline for Claude Code. Works for any product type — e-commerce, AI tools, scientific software, SaaS, CFD simulations, mobile apps.
+A structured, repeatable product development pipeline for Claude Code. Works for any product type — e-commerce, AI tools, scientific software, SaaS, CFD simulations, mobile apps.
 
 ---
 
 ## What It Does
 
-Every time you start a new product, you go through the same process. App Builder codifies that process into a plugin with specialized subagents for each phase, hooks that enforce quality gates, and persistent state so you can pause and resume at any point.
+Every time you start a new product, you go through the same process. Claude Builder Starter Pack codifies that process into a plugin with specialized subagents for each phase, hooks that enforce quality gates, and persistent state so you can pause and resume at any point.
 
 ```
 Phase 1  ──  Spec Definition
@@ -26,16 +26,16 @@ Phase 9  ──  Deploy & Debug
 
 ## Installation
 
-### Step 1 — Add the marketplace
+### Step 1 — Clone the repo
 
 ```
-/plugin marketplace add ~/app-builder-marketplace
+git clone https://github.com/your-username/claude-builder-starterpack ~/claude-builder-starterpack
 ```
 
 ### Step 2 — Install the plugin
 
 ```
-/plugin install app-builder@app-builder-marketplace
+/plugin install ~/claude-builder-starterpack
 ```
 
 Restart Claude Code when prompted.
@@ -50,7 +50,7 @@ Restart Claude Code when prompted.
 /app-builder
 ```
 
-Checks for `.app-builder/state.json` in your project, then either starts fresh or resumes from where you left off.
+Checks for `.claude-builder-starterpack/state.json` in your project, then either starts fresh or resumes from where you left off.
 
 ### Shortcuts — jump to any phase directly
 
@@ -73,19 +73,19 @@ Checks for `.app-builder/state.json` in your project, then either starts fresh o
 ### Check pipeline status
 
 ```
-/app-builder status
+/claude-builder-starterpack status
 ```
 
 ### See all post-launch features
 
 ```
-/app-builder features
+/claude-builder-starterpack features
 ```
 
 ### Restart a phase
 
 ```
-/app-builder restart phase 4
+/claude-builder-starterpack restart phase 4
 ```
 
 ---
@@ -160,7 +160,7 @@ Run at any time. Scoped or full:
 ## Plugin Structure
 
 ```
-app-builder-plugin/
+claude-builder-starterpack/
 ├── .claude-plugin/
 │   └── plugin.json
 ├── README.md
@@ -171,7 +171,7 @@ app-builder-plugin/
 │   ├── frontend-agent.md
 │   ├── design-agent.md
 │   ├── docs-agent.md
-│   ├── cleanup-agent.md        ← NEW
+│   ├── cleanup-agent.md
 │   ├── deploy-agent.md
 │   ├── feature-agent.md
 │   └── nebius-agent.md
@@ -183,15 +183,19 @@ app-builder-plugin/
 │   ├── frontend-basic/           # /frontend
 │   ├── frontend-design/          # /design [style]
 │   ├── documentation/            # /docs
-│   ├── cleanup/                  # /cleanup [scope]   ← NEW
+│   ├── cleanup/                  # /cleanup [scope]
 │   ├── deploy-debug/             # /deploy [platform]
 │   ├── new-feature/              # /new-feature [desc]
 │   └── nebius/                   # /nebius [action]
 ├── hooks/
 │   └── hooks.json
 └── scripts/
+    ├── snapshot-before-phase.sh
+    ├── progress-reporter.sh
+    ├── on-subagent-stop.sh
     ├── on-file-write.sh
-    └── on-subagent-stop.sh
+    ├── guard-no-secrets.sh
+    └── guard-deploy-requires-cleanup.sh
 ```
 
 ---
@@ -285,14 +289,8 @@ Add to your project's `.claude/settings.json`:
 
 ```json
 {
-  "extraKnownMarketplaces": {
-    "app-builder-marketplace": {
-      "source": "github",
-      "repo": "your-org/app-builder-marketplace"
-    }
-  },
   "enabledPlugins": {
-    "app-builder@app-builder-marketplace": true
+    "claude-builder-starterpack": true
   }
 }
 ```
