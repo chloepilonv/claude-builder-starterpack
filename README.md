@@ -32,10 +32,16 @@ Phase 9  ──  Deploy & Debug
 git clone https://github.com/your-username/claude-builder-starterpack ~/claude-builder-starterpack
 ```
 
-### Step 2 — Install the plugin
+### Step 2 — Add the marketplace
 
 ```
-/plugin install ~/claude-builder-starterpack
+/plugin marketplace add ~/claude-builder-starterpack
+```
+
+### Step 3 — Install the plugin
+
+```
+/plugin install claude-builder-starterpack@claude-builder-starterpack
 ```
 
 Restart Claude Code when prompted.
