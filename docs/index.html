@@ -22,23 +22,15 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html, body {
-  height: 100%;
-  overflow: hidden;
-}
-
 body {
   font-family: var(--sans);
   background: linear-gradient(180deg, #e8dfd4 0%, #d6cfc5 40%, #c9c0b4 100%);
+  background-attachment: fixed;
   color: var(--ink);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   -webkit-font-smoothing: antialiased;
-  position: relative;
+  min-height: 100vh;
 }
 
-/* Soft warm light from top */
 body::before {
   content: '';
   position: fixed;
@@ -46,393 +38,340 @@ body::before {
   width: 70vw; height: 70vw;
   background: radial-gradient(ellipse, rgba(255,248,235,0.5) 0%, transparent 70%);
   pointer-events: none;
+  z-index: 0;
 }
 
-/* Paper grain */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events: none;
-  z-index: 9999;
+  z-index: 0;
 }
 
-/* ---- The card ---- */
-.card {
-  width: 90vw;
-  max-width: 920px;
-  height: 85vh;
-  max-height: 620px;
-  background: var(--card);
-  border-radius: 16px;
-  box-shadow:
-    0 1px 2px rgba(0,0,0,0.04),
-    0 4px 16px rgba(0,0,0,0.06),
-    0 24px 60px rgba(0,0,0,0.08);
+.page {
   position: relative;
   z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 2rem 6rem;
   display: flex;
   flex-direction: column;
+  gap: 2rem;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06), 0 24px 60px rgba(0,0,0,0.08);
   overflow: hidden;
 }
 
-/* ---- Top bar ---- */
+/* Hero */
 .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 14px 24px;
   border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
 }
 
-.topbar-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
+.topbar-left { display: flex; align-items: center; gap: 1rem; }
 
-.topbar-left .label {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--ink-faint);
-}
+.tag { font-family: var(--mono); font-size: 0.6rem; color: var(--red); letter-spacing: 0.08em; }
+.label { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-faint); }
 
-.topbar-left .tag {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  color: var(--red);
-  letter-spacing: 0.08em;
-}
+.topbar-right { display: flex; align-items: center; gap: 1rem; }
+.dot { width: 8px; height: 8px; border: 1.5px solid var(--red); border-radius: 50%; }
 
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.topbar-right .dot {
-  width: 8px; height: 8px;
-  border: 1.5px solid var(--red);
-  border-radius: 50%;
-}
-
-.topbar-right .install-btn {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  padding: 5px 14px;
-  background: none;
-  border: 1.5px solid var(--ink);
-  border-radius: 100px;
-  cursor: pointer;
-  color: var(--ink);
-  letter-spacing: 0.04em;
+.gh-btn {
+  font-family: var(--mono); font-size: 0.65rem; padding: 5px 14px;
+  background: none; border: 1.5px solid var(--ink); border-radius: 100px;
+  cursor: pointer; color: var(--ink); letter-spacing: 0.04em; text-decoration: none;
   transition: all 0.2s;
 }
+.gh-btn:hover { background: var(--red); border-color: var(--red); color: white; }
 
-.topbar-right .install-btn:hover {
-  background: var(--red);
-  border-color: var(--red);
-  color: white;
-}
+.hero-body { padding: 2.5rem 3rem 2rem; }
 
-/* ---- Main content ---- */
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 2.5rem 3rem 2rem;
-  min-height: 0;
-}
-
-/* Title */
 .title {
-  font-family: var(--serif);
-  font-size: clamp(2.2rem, 5vw, 3.8rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 0.95;
-  color: var(--red);
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
+  font-family: var(--serif); font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 700; letter-spacing: -0.02em; line-height: 0.95;
+  color: var(--red); text-transform: uppercase; margin-bottom: 0.6rem;
 }
 
-.subtitle {
-  font-family: var(--serif);
-  font-size: 1rem;
-  color: var(--ink-light);
-  font-style: italic;
-  margin-bottom: 2.5rem;
-  font-weight: 400;
+.hero-desc {
+  font-family: var(--serif); font-size: 1.05rem; color: var(--ink-light);
+  font-style: italic; max-width: 520px; line-height: 1.5; margin-bottom: 2rem;
 }
 
-/* ---- Phase grid (the core visual) ---- */
 .grid {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  gap: 6px;
-  min-height: 0;
+  display: grid; grid-template-columns: repeat(9, 1fr); gap: 6px; margin-bottom: 1.5rem;
 }
 
 .cell {
-  background: var(--cream);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 0.4rem;
-  text-align: center;
-  transition: all 0.25s;
-  cursor: default;
-  position: relative;
-  overflow: hidden;
+  background: var(--cream); border: 1px solid var(--border); border-radius: 8px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0.85rem 0.4rem; text-align: center; transition: all 0.25s;
 }
-
-.cell:hover {
-  background: white;
-  border-color: var(--red);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(212, 43, 43, 0.08);
-}
-
-.cell .num {
-  font-family: var(--mono);
-  font-size: 0.55rem;
-  color: var(--ink-faint);
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.05em;
-}
-
-.cell .name {
-  font-family: var(--serif);
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--ink);
-  line-height: 1.2;
-  margin-bottom: 0.3rem;
-}
-
-.cell .cmd {
-  font-family: var(--mono);
-  font-size: 0.5rem;
-  color: var(--red);
-  letter-spacing: 0.02em;
-}
-
+.cell:hover { background: white; border-color: var(--red); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(212,43,43,0.08); }
+.cell .num { font-family: var(--mono); font-size: 0.5rem; color: var(--ink-faint); margin-bottom: 0.4rem; letter-spacing: 0.05em; }
+.cell .name { font-family: var(--serif); font-size: 0.75rem; font-weight: 600; color: var(--ink); line-height: 1.2; margin-bottom: 0.3rem; }
+.cell .cmd { font-family: var(--mono); font-size: 0.48rem; color: var(--red); letter-spacing: 0.02em; }
 .cell:hover .num { color: var(--red); }
 
-/* ---- Bottom bar ---- */
+.hero-cta {
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+}
+.cta-label { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-faint); }
+.cta-cmd {
+  font-family: var(--mono); font-size: 0.72rem;
+  background: var(--cream); border: 1px solid var(--border); border-radius: 6px;
+  padding: 5px 12px; color: var(--ink); cursor: pointer; transition: all 0.2s;
+}
+.cta-cmd:hover { border-color: var(--red); color: var(--red); }
+.copied { font-family: var(--mono); font-size: 0.55rem; color: var(--red); opacity: 0; transition: opacity 0.2s; }
+.copied.show { opacity: 1; }
+
 .bottombar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 24px;
-  border-top: 1px solid var(--border);
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 24px; border-top: 1px solid var(--border);
 }
+.stats { display: flex; gap: 2rem; }
+.stat { display: flex; flex-direction: column; }
+.s-label { font-family: var(--mono); font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-faint); margin-bottom: 0.1rem; }
+.s-val { font-family: var(--serif); font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+.built-for { font-family: var(--mono); font-size: 0.55rem; color: var(--ink-faint); letter-spacing: 0.08em; }
+.built-for span { color: var(--red); }
 
-.bottombar-left {
-  display: flex;
-  gap: 2rem;
+/* Section cards */
+.section-card { padding: 2rem 2.5rem; }
+.section-title { font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--ink-faint); margin-bottom: 1.25rem; }
+
+/* What */
+.what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.wi-title { font-family: var(--serif); font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; }
+.wi-body { font-size: 0.8rem; color: var(--ink-light); line-height: 1.55; }
+
+/* How */
+.step { display: flex; gap: 1.25rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+.step:last-child { border-bottom: none; }
+.step-num { font-family: var(--mono); font-size: 0.6rem; color: var(--red); flex-shrink: 0; padding-top: 0.15rem; width: 2rem; }
+.step strong { font-family: var(--serif); font-size: 0.95rem; font-weight: 600; display: block; margin-bottom: 0.2rem; }
+.step p { font-size: 0.8rem; color: var(--ink-light); line-height: 1.5; }
+.step code { font-family: var(--mono); font-size: 0.72rem; color: var(--red); background: var(--cream); padding: 1px 5px; border-radius: 4px; }
+
+/* Agents */
+.agents-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.agents-table th { font-family: var(--mono); font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-faint); text-align: left; padding: 0 0.75rem 0.75rem 0; border-bottom: 1px solid var(--border); }
+.agents-table td { padding: 0.6rem 0.75rem 0.6rem 0; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--ink-light); line-height: 1.4; }
+.agents-table tr:last-child td { border-bottom: none; }
+.agents-table td:first-child { font-family: var(--mono); font-size: 0.68rem; color: var(--red); white-space: nowrap; }
+
+/* Install */
+.install-block { display: flex; flex-direction: column; gap: 1.25rem; }
+.install-step { display: flex; gap: 1.25rem; align-items: flex-start; }
+.install-step-num { font-family: var(--mono); font-size: 0.6rem; color: var(--red); flex-shrink: 0; padding-top: 0.15rem; width: 2rem; }
+.install-step p { font-size: 0.82rem; color: var(--ink-light); margin-bottom: 0.5rem; }
+.code-block {
+  font-family: var(--mono); font-size: 0.72rem; background: var(--cream);
+  border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem;
+  color: var(--ink); white-space: pre; overflow-x: auto; cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
 }
+.code-block:hover { border-color: var(--red); }
 
-.stat {
-  display: flex;
-  flex-direction: column;
-}
-
-.stat .s-label {
-  font-family: var(--mono);
-  font-size: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--ink-faint);
-  margin-bottom: 0.1rem;
-}
-
-.stat .s-val {
-  font-family: var(--serif);
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.bottombar-right {
-  font-family: var(--mono);
-  font-size: 0.55rem;
-  color: var(--ink-faint);
-  letter-spacing: 0.08em;
-}
-
-.bottombar-right span { color: var(--red); }
-
-/* ---- Floating corner labels (like the reference image) ---- */
-.corner {
-  position: fixed;
-  font-family: var(--mono);
-  font-size: 0.55rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--ink-faint);
-  z-index: 2;
-}
-
-.corner.tl { top: 20px; left: 24px; }
-.corner.tr { top: 20px; right: 24px; color: var(--red); }
-.corner.bl { bottom: 20px; left: 24px; }
-.corner.br { bottom: 20px; right: 24px; }
-
-/* ---- Responsive ---- */
 @media (max-width: 768px) {
-  .card {
-    width: 95vw;
-    height: 90vh;
-    max-height: none;
-    border-radius: 12px;
-  }
-  .main { padding: 1.5rem 1.5rem 1rem; }
-  .title { font-size: clamp(1.6rem, 6vw, 2.5rem); }
-  .subtitle { margin-bottom: 1.5rem; font-size: 0.88rem; }
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
-  }
-  .topbar, .bottombar { padding: 10px 16px; }
-  .bottombar-left { gap: 1.25rem; }
-  .corner { display: none; }
-}
-
-@media (max-width: 480px) {
-  .grid { grid-template-columns: repeat(3, 1fr); }
-  .main { padding: 1.25rem 1rem 0.75rem; }
-  .topbar-left .label { display: none; }
-}
-
-@media (max-height: 600px) {
-  .card { height: 92vh; }
-  .main { padding: 1.25rem 2rem 0.75rem; }
-  .subtitle { margin-bottom: 1rem; }
-  .cell { padding: 0.5rem 0.3rem; }
-  .cell .name { font-size: 0.65rem; }
+  .page { padding: 1.5rem 1rem 4rem; gap: 1.25rem; }
+  .hero-body { padding: 1.75rem 1.5rem 1.5rem; }
+  .section-card { padding: 1.5rem; }
+  .grid { grid-template-columns: repeat(3, 1fr); gap: 5px; }
+  .what-grid { grid-template-columns: 1fr; }
+  .stats { gap: 1.25rem; }
 }
 </style>
 </head>
 <body>
 
-<!-- Corner labels -->
-<div class="corner tl">Claude Code Plugin</div>
-<div class="corner tr">v1.0.0</div>
-<div class="corner bl">2025</div>
-<div class="corner br">9 phases</div>
+<div class="page">
 
-<!-- The card -->
-<div class="card">
-
-  <!-- Top bar -->
-  <div class="topbar">
-    <div class="topbar-left">
-      <span class="tag">Claude Builder StarterPack</span>
-      <span class="label">N.001</span>
+  <!-- Hero -->
+  <div class="card">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="tag">Claude Builder Starterpack</span>
+        <span class="label">v1.0.1</span>
+      </div>
+      <div class="topbar-right">
+        <div class="dot"></div>
+        <a class="gh-btn" href="https://github.com/chloepilonv/claude-builder-starterpack" target="_blank" rel="noopener">GitHub</a>
+      </div>
     </div>
-    <div class="topbar-right">
-      <div class="dot"></div>
-      <a class="install-btn" href="https://github.com/chloepilonv/claude-builder-starterpack" target="_blank" rel="noopener">GitHub</a>
+
+    <div class="hero-body">
+      <div class="title">Claude<br>Builder</div>
+      <p class="hero-desc">A Claude Code plugin that turns any new product idea into a structured 9-phase pipeline — from spec to deployed app, with specialized subagents at every step.</p>
+
+      <div class="grid">
+        <div class="cell"><div class="num">01</div><div class="name">Spec</div><div class="cmd">/cbs:spec</div></div>
+        <div class="cell"><div class="num">02</div><div class="name">Plan</div><div class="cmd">/cbs:plan</div></div>
+        <div class="cell"><div class="num">03</div><div class="name">Build 1</div><div class="cmd">/cbs:build 1</div></div>
+        <div class="cell"><div class="num">04</div><div class="name">Build 2</div><div class="cmd">/cbs:build 2</div></div>
+        <div class="cell"><div class="num">05</div><div class="name">Build 3</div><div class="cmd">/cbs:build 3</div></div>
+        <div class="cell"><div class="num">06</div><div class="name">Frontend</div><div class="cmd">/cbs:frontend</div></div>
+        <div class="cell"><div class="num">07</div><div class="name">Design</div><div class="cmd">/cbs:design</div></div>
+        <div class="cell"><div class="num">08</div><div class="name">Docs</div><div class="cmd">/cbs:docs</div></div>
+        <div class="cell"><div class="num">09</div><div class="name">Deploy</div><div class="cmd">/cbs:deploy</div></div>
+      </div>
+
+      <div class="hero-cta">
+        <span class="cta-label">Start a project →</span>
+        <span class="cta-cmd" onclick="copyCmd(this, '/cbs:app-builder')">/cbs:app-builder</span>
+        <span class="copied" id="copied">copied</span>
+      </div>
+    </div>
+
+    <div class="bottombar">
+      <div class="stats">
+        <div class="stat"><span class="s-label">Agents</span><span class="s-val">10</span></div>
+        <div class="stat"><span class="s-label">Hooks</span><span class="s-val">6</span></div>
+        <div class="stat"><span class="s-label">Commands</span><span class="s-val">11</span></div>
+        <div class="stat"><span class="s-label">Works for</span><span class="s-val">Any product</span></div>
+      </div>
+      <div class="built-for">Built for <span>Claude Code</span></div>
     </div>
   </div>
 
-  <!-- Main -->
-  <div class="main">
-    <div class="title">App<br>Builder</div>
-    <div class="subtitle">All you need to code with Claude. From spec to deploy.</div>
-
-    <!-- Phase grid -->
-    <div class="grid">
-      <div class="cell">
-        <div class="num">01</div>
-        <div class="name">Spec</div>
-        <div class="cmd">/spec</div>
+  <!-- What it does -->
+  <div class="card section-card">
+    <div class="section-title">What it does</div>
+    <div class="what-grid">
+      <div>
+        <div class="wi-title">Structured pipeline, not chaos</div>
+        <p class="wi-body">Every product follows the same 9 phases. The orchestrator tracks state, enforces approval gates between phases, and never auto-advances without your go-ahead.</p>
       </div>
-      <div class="cell">
-        <div class="num">02</div>
-        <div class="name">Plan</div>
-        <div class="cmd">/plan</div>
+      <div>
+        <div class="wi-title">Specialized subagents per phase</div>
+        <p class="wi-body">Each phase delegates to a purpose-built agent — a spec interviewer, a feasibility planner, a build executor, a design system applier, a deploy debugger. Right tool, right context.</p>
       </div>
-      <div class="cell">
-        <div class="num">03</div>
-        <div class="name">Build 1</div>
-        <div class="cmd">/build 1</div>
+      <div>
+        <div class="wi-title">MVP phases defined by your plan</div>
+        <p class="wi-body">Build phases 3–5 aren't assumed. The plan agent defines exactly what to build in each sprint based on your actual product — so goals come from your spec, not from guessing.</p>
       </div>
-      <div class="cell">
-        <div class="num">04</div>
-        <div class="name">Build 2</div>
-        <div class="cmd">/build 2</div>
-      </div>
-      <div class="cell">
-        <div class="num">05</div>
-        <div class="name">Build 3</div>
-        <div class="cmd">/build 3</div>
-      </div>
-      <div class="cell">
-        <div class="num">06</div>
-        <div class="name">Frontend</div>
-        <div class="cmd">/frontend</div>
-      </div>
-      <div class="cell">
-        <div class="num">07</div>
-        <div class="name">Design</div>
-        <div class="cmd">/design</div>
-      </div>
-      <div class="cell">
-        <div class="num">08</div>
-        <div class="name">Docs</div>
-        <div class="cmd">/docs</div>
-      </div>
-      <div class="cell">
-        <div class="num">09</div>
-        <div class="name">Deploy</div>
-        <div class="cmd">/deploy</div>
+      <div>
+        <div class="wi-title">Hooks that enforce quality gates</div>
+        <p class="wi-body">Git snapshots before every phase. Progress reporter on every tool call. Artifact gate blocks session close if a phase output is missing. Security guard before deploy.</p>
       </div>
     </div>
   </div>
 
-  <!-- Bottom bar -->
-  <div class="bottombar">
-    <div class="bottombar-left">
-      <div class="stat">
-        <span class="s-label">Agents</span>
-        <span class="s-val">10</span>
+  <!-- How it works -->
+  <div class="card section-card">
+    <div class="section-title">How it works</div>
+    <div>
+      <div class="step">
+        <div class="step-num">01</div>
+        <div>
+          <strong>Run <code>/cbs:app-builder</code> in your project directory</strong>
+          <p>The orchestrator checks for <code>.app-builder/state.json</code>. New project: starts at Phase 1. Existing project: shows pipeline status and asks where to resume.</p>
+        </div>
       </div>
-      <div class="stat">
-        <span class="s-label">Hooks</span>
-        <span class="s-val">6</span>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div>
+          <strong>Each phase runs in its own subagent</strong>
+          <p>The orchestrator delegates to the right specialist — spec-agent interviews you and produces a rigorous product spec, plan-agent does feasibility and risk, build-agent executes MVP sprints based on what was planned.</p>
+        </div>
       </div>
-      <div class="stat">
-        <span class="s-label">Commands</span>
-        <span class="s-val">11</span>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div>
+          <strong>Approval gate after every phase</strong>
+          <p>When a phase completes, the pipeline status table is rendered and you choose: <code>yes</code> to proceed, <code>review</code> to read the output, <code>redo</code> to re-run, <code>skip</code>, or <code>stop</code> to pause.</p>
+        </div>
       </div>
-      <div class="stat">
-        <span class="s-label">Product types</span>
-        <span class="s-val">Any</span>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div>
+          <strong>Jump in anywhere with shortcuts</strong>
+          <p>Don't need to start from scratch — <code>/cbs:build 2</code> jumps to MVP phase 2, <code>/cbs:design dark brutalist</code> goes straight to design, <code>/cbs:cleanup security</code> runs a security audit anytime.</p>
+        </div>
       </div>
     </div>
-    <div class="bottombar-right">Built for <span>Claude Code</span></div>
+  </div>
+
+  <!-- Agents -->
+  <div class="card section-card">
+    <div class="section-title">Agents</div>
+    <table class="agents-table">
+      <thead><tr><th>Command</th><th>Agent</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td>/cbs:app-builder</td><td>Orchestrator</td><td>Manages the full pipeline, tracks state, enforces approval gates</td></tr>
+        <tr><td>/cbs:spec</td><td>spec-agent</td><td>Interviews you and produces a rigorous product spec</td></tr>
+        <tr><td>/cbs:plan</td><td>plan-agent</td><td>Feasibility check, risk matrix, defines your custom MVP phases</td></tr>
+        <tr><td>/cbs:build [N]</td><td>build-agent</td><td>Executes any MVP phase per the plan — zero assumed structure</td></tr>
+        <tr><td>/cbs:frontend</td><td>frontend-agent</td><td>Builds the functional UI (functionality first, no design polish yet)</td></tr>
+        <tr><td>/cbs:design [style]</td><td>design-agent</td><td>Applies a full design system from a style argument or moodboard</td></tr>
+        <tr><td>/cbs:docs</td><td>docs-agent</td><td>Writes README, ARCHITECTURE, API docs; cleans the repo</td></tr>
+        <tr><td>/cbs:deploy [platform]</td><td>deploy-agent</td><td>CI/CD setup, production deploy, smoke tests, debugging</td></tr>
+        <tr><td>/cbs:cleanup [scope]</td><td>cleanup-agent</td><td>Dead files, secrets audit, dep patches, README check — run anytime</td></tr>
+        <tr><td>/cbs:new-feature [desc]</td><td>feature-agent</td><td>Mini spec + build + test + deploy for any post-launch feature</td></tr>
+        <tr><td>/cbs:nebius [action]</td><td>nebius-agent</td><td>Nebius AI Cloud — GPU instances, jobs, storage, cost tracking</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Install -->
+  <div class="card section-card">
+    <div class="section-title">Installation</div>
+    <div class="install-block">
+      <div class="install-step">
+        <div class="install-step-num">01</div>
+        <div>
+          <p>Clone the repo</p>
+          <div class="code-block" onclick="copyBlock(this)">git clone https://github.com/chloepilonv/claude-builder-starterpack ~/claude-builder-starterpack</div>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">02</div>
+        <div>
+          <p>Register the marketplace — run inside Claude Code</p>
+          <div class="code-block" onclick="copyBlock(this)">/plugin marketplace add ~/claude-builder-starterpack</div>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">03</div>
+        <div>
+          <p>Install the plugin — run inside Claude Code</p>
+          <div class="code-block" onclick="copyBlock(this)">/plugin install claude-builder-starterpack@claude-builder-starterpack</div>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">04</div>
+        <div>
+          <p>Restart Claude Code, then in any project directory:</p>
+          <div class="code-block" onclick="copyBlock(this)">/cbs:app-builder</div>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>
 
 <script>
-function copy(el) {
-  navigator.clipboard.writeText('/plugin marketplace add chloepilonv/claude-builder-starterpack').then(function() {
-    var b = el.querySelector('.copy-txt') || el;
-    var o = b.textContent;
-    b.textContent = 'Copied!';
-    setTimeout(function() { b.textContent = o; }, 1500);
+function copyCmd(el, text) {
+  navigator.clipboard.writeText(text).then(function() {
+    var tip = document.getElementById('copied');
+    tip.classList.add('show');
+    setTimeout(function() { tip.classList.remove('show'); }, 1500);
+  });
+}
+function copyBlock(el) {
+  navigator.clipboard.writeText(el.textContent.trim()).then(function() {
+    el.style.borderColor = 'var(--red)';
+    el.style.color = 'var(--red)';
+    setTimeout(function() { el.style.borderColor = ''; el.style.color = ''; }, 1200);
   });
 }
 </script>

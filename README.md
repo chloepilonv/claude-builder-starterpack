@@ -198,15 +198,15 @@ claude-builder-starterpack/          ← clone this repo
     │   ├── feature-agent.md
     │   └── nebius-agent.md
     ├── skills/
-    │   ├── app-builder-orchestrate/  # /cbs:app-builder
-    │   ├── spec-definition/          # /cbs:spec
-    │   ├── plan-creation/            # /cbs:plan
-    │   ├── mvp-build/                # /cbs:build [N]
-    │   ├── frontend-basic/           # /cbs:frontend
-    │   ├── frontend-design/          # /cbs:design [style]
-    │   ├── documentation/            # /cbs:docs
+    │   ├── app-builder/              # /cbs:app-builder
+    │   ├── spec/                     # /cbs:spec
+    │   ├── plan/                     # /cbs:plan
+    │   ├── build/                    # /cbs:build [N]
+    │   ├── frontend/                 # /cbs:frontend
+    │   ├── design/                   # /cbs:design [style]
+    │   ├── docs/                     # /cbs:docs
     │   ├── cleanup/                  # /cbs:cleanup [scope]
-    │   ├── deploy-debug/             # /cbs:deploy [platform]
+    │   ├── deploy/                   # /cbs:deploy [platform]
     │   ├── new-feature/              # /cbs:new-feature [desc]
     │   └── nebius/                   # /cbs:nebius [action]
     ├── hooks/
